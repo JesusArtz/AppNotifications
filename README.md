@@ -44,7 +44,15 @@ Select the process and click on "Finish Task"
 
 ###### Linux
 
-Coming soon added the shutdown process in linux
+To close the application in Linux, in my case Fedora, go to the system monitor, go to the Processes section and search for python
+
+![image](https://user-images.githubusercontent.com/85129357/138603293-635e4afa-8bfe-4219-b5b1-cfec658aa218.png)
+
+Right click on the process
+
+![image](https://user-images.githubusercontent.com/85129357/138603323-61ed926c-ac1a-4715-98dd-6cedbcf4aed1.png)
+
+And click on Finish
 
 ### Screenshots
 
