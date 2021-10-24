@@ -19,26 +19,6 @@ url = "https://www.buymeacoffee.com/jesusartz"
 def BuyMeaCoffee():
     webbrowser.open_new(url)
 
-# Coneccion a base de datos
-def dataBase():
-    connection = pymysql.connect(
-        host='localhost',
-        user='root',
-        password='',
-        db='dbapp'
-    )
-    cursor = connection.cursor()
-
-    cons1 = "SELECT titulo FROM motivacion"
-    cons2 = "SELECT contenido FROM motivacion"
-
-    cursor.execute(cons1)
-    titulo = cursor.fetchall()
-
-    cursor.execute(cons2)
-    contenido = cursor.fetchall()
-    
-
 def LinuxMessage(title, description):
     notify2.init('Test')
     notify = notify2.Notification(title, description)
