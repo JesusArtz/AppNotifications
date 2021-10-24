@@ -13,7 +13,9 @@ if platform == "win32":
 elif platform == "linux" or platform == "linux2":
     import notify2
 
-def dataBase(titulo, contenido):
+
+# Coneccion a base de datos
+def dataBase():
     connection = pymysql.connect(
         host='localhost',
         user='root',
@@ -22,7 +24,15 @@ def dataBase(titulo, contenido):
     )
     cursor = connection.cursor()
 
-    sql = "SELECT * FROM motivacion"
+    cons1 = "SELECT titulo FROM motivacion"
+    cons2 = "SELECT contenido FROM motivacion"
+
+    cursor.execute(cons1)
+    titulo = cursor.fetchall()
+
+    cursor.execute(cons2)
+    contenido = cursor.fetchall()
+    
 
 def LinuxMessage(title, description):
     notify2.init('Test')
@@ -36,14 +46,12 @@ def WindowsMessage(tittle, description):
 
 def mainProgram():
     if platform == "linux" or platform == "linux2":
-        
         LinuxMessage("Recuerda beber agua", "Cuida tu cuerpo y mantente centrado <3")
         time.sleep(1000)
             
 
 
     elif platform == "win32":
-        
         WindowsMessage("Recuerda beber agua", "Cuida tu cuerpo y mantente centrado <3")
         time.sleep(100)
         
@@ -51,20 +59,33 @@ def bucle():
     while True:
         mainProgram()
 
- 
-
 root = Tk()
-estilo = Style(theme='darkly')
+estilo = Style(theme='pers')
 ventana = estilo.master
 root.title("App")
 root.geometry("600x450")
+imagen = PhotoImage(file= "Assets/CTRL.png")
+Label(root, image= imagen).pack(pady=5)
+
+#Variables de Checkbutton
+
 motivacion = IntVar()
 salud = IntVar()
 datosCuriosos = IntVar()
-botonInicio = Button(text="Start", command=threading.Thread(target=bucle).start())
+
+#Botones y Checkbuttons
+
+botonInicio = Button(text="Start", command=lambda:threading.Thread(target=bucle).start())
 botonStop = Button(text="Stop")
 botonStop.place(x=340, y=400)
 botonInicio.place(x=200, y=400)
 check1 = Checkbutton(text="Curiosidades", variable=datosCuriosos, onvalue=1, offvalue=0)
-check1.place(x=150, y=50)
+check1.place(x=75, y=250)
+check2 = Checkbutton(text="Salud", variable=salud, onvalue=1, offvalue=0)
+check2.place(x=75, y=300)
+check3 = Checkbutton(text="Motivacion", variable=motivacion, onvalue=1, offvalue=0)
+check3.place(x=75, y=350)
+
+#Main Loop
+
 root.mainloop()
