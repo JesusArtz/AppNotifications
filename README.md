@@ -1,6 +1,7 @@
 ![CTRL](https://user-images.githubusercontent.com/85129357/138582981-1ccad591-7c8c-48e5-9e9b-53c8b9b8e62d.png)
 
 CTRL App is a python Tkinter tool that allows you to receive alerts that remind you for example to drink water or get up from the chair
+UPDATE: The app now throws notifications about curious data
 
 # Installation
 If you are using Linux or Linux 2
