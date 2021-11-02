@@ -1,5 +1,6 @@
 import threading
-import pymysql
+import requests
+import random
 import time
 from tkinter import *
 from tkinter import ttk
@@ -14,6 +15,10 @@ if platform == "win32":
 elif platform == "linux" or platform == "linux2":
     import notify2
 
+
+
+# Carga la ventana de Tkinter
+
 root = Tk()
 estilo = Style(theme='pers')
 ventana = estilo.master
@@ -22,59 +27,80 @@ root.geometry("600x450")
 imagen = PhotoImage(file= "Assets/CTRL.png")
 Label(root, image= imagen).pack(pady=5)
 
-#Variables de Checkbutton
+varTime = IntVar()
 
-motivacion = IntVar()
-salud = IntVar()
-datosCuriosos = IntVar()
+# Define la listas donde se almacenaran los datos de la API
+listaTitulos = []
+listaMensajes = []
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+response = requests.get("https://jesusartz.net/api/datos", headers=headers)
+object = response.json()
+for i in object['postData']:
+    listaTitulos.append(i['titulo'])
+    listaMensajes.append(i['mensaje'])
 
+
+# Detecta el tamaño de las listas
+longitud = len(listaMensajes)
+
+
+
+# Hace Funcionar el boton de BuyMeaCoffe (PARTE ESENCIAL NO TOCAR)
 url = "https://www.buymeacoffee.com/jesusartz"
-
 def BuyMeaCoffee():
     webbrowser.open_new(url)
 
+# Define los parametros de notificacion para Linux
 def LinuxMessage(title, description):
     notify2.init('Test')
     notify = notify2.Notification(title, description)
     notify
     return
 
+# Define los parametros de notificacion para Windows
 def WindowsMessage(tittle, description):
     notificacion.show_toast(tittle, description, duration=5)
     return
 
+# Correr programa principal
 def mainProgram():
-    if (motivacion.get()==1) and (salud.get()==0) and (datosCuriosos==1):
+    # Detecta la platarfoma en la que esta corriendo el programa
+    if platform == "linux" or platform == "linux2":
+        # Genera un numero aleartorio para enviar una notificacion al azar de la api 
+        randomNum = random.randint(5, longitud)
+        # Envia la notificacion de la Lista [RANDOM]
+        LinuxMessage(listaTitulos[randomNum], listaMensajes[randomNum])
+        # Tiempo de espera para la siguiente notificacion
+        time.sleep(15)
 
-        if platform == "linux" or platform == "linux2":
-            LinuxMessage("¿Los sabias?", 'Más del 70% de todos los trabajos de programación son en campos e industrias fuera de la tecnología.')
-            time.sleep(1000)
-            LinuxMessage("¿Lo sabias?", "El primer lenguaje de programación del mundo se llamó FORTRAN")
-            time.sleep(1000)
-            LinuxMessage("¿Lo sabias?", "Hoy en día, ¡hay más de 700 lenguajes de programación en el mundo!")
-            time.sleep(1000)
-            LinuxMessage("¿Lo sabias?", "Triller de Michael Jackson es el album mas vendido de la historia")
-            time.sleep(1000)
-            LinuxMessage("Cuidadoooo", "Usa siempre Console Log")
-            time.sleep(1000)
-        
-        elif platform == "win32":
-            WindowsMessage("¿Los sabias?", 'Más del 70% de todos los trabajos de programación son en campos e industrias fuera de la tecnología.')
-            time.sleep(1000)
-            WindowsMessage("¿Lo sabias?", "El primer lenguaje de programación del mundo se llamó FORTRAN")
-            time.sleep(1000)
-            WindowsMessage("¿Lo sabias?", "Hoy en día, ¡hay más de 700 lenguajes de programación en el mundo!")
-            time.sleep(1000)
-            WindowsMessage("¿Lo sabias?", "Triller de Michael Jackson es el album mas vendido de la historia")
-            time.sleep(1000)
-            WindowsMessage("Cuidadoooo", "Usa siempre Console Log")
-            time.sleep(1000)
-            WindowsMessage("Recuerda beber agua", "Cuida tu cuerpo y mantente centrado <3")
-            time.sleep(1000)
-        
+    elif platform == "win32":
+        # Genera un numero aleartorio para enviar una notificacion al azar de la api 
+        randomNum = random.randint(5, longitud)
+        # Envia la notificacion de la Lista [RANDOM]
+        WindowsMessage(listaTitulos[randomNum], listaMensajes[randomNum])
+        # Tiempo de espera para la siguiente notificacion
+        time.sleep(15)
+    
+#def apiGet():
+#    while True:
+#        response = requests.get("http://localhost:3001/api/motivacion")
+#        object = response.json()
+#        for i in object:
+#            listaTitulos.append(i['titulo'])
+#            listaMensajes.append(i['mensaje'])
+
+
+# Esta funcion crea un hilo en el sistema para poder usar la interfaz a la vez que el bucle se ejecuta
 def bucle():
+    stop_threads = False
     while True:
         mainProgram()
+        stop_threads
+        if stop_threads:
+            break
+
+def StopThread():
+    stop_threads = True
 
 
 
@@ -83,18 +109,18 @@ def bucle():
 #Botones y Checkbuttons
 
 botonInicio = Button(text="Start", command=lambda:threading.Thread(target=bucle).start())
-botonStop = Button(text="Stop")
+tiempoVar = Label(root, textvariable=varTime)
+tiempoVar.place(x=300, y=225)
+tiempoVar.pack()
+botonStop = Button(text="Stop", command=StopThread)
 botonCoffee = Button(text="Buy Me a Coffee", command=BuyMeaCoffee)
 botonCoffee.place(x= 450, y= 400)
 botonStop.place(x=300, y=400)
 botonInicio.place(x=150, y=400)
-check1 = Checkbutton(text="Curiosidades y Consejos", variable=datosCuriosos, onvalue=1, offvalue=0)
-check1.place(x=75, y=250)
-check2 = Checkbutton(text="Salud", variable=salud, onvalue=1, offvalue=0)
-check2.place(x=75, y=300)
-check3 = Checkbutton(text="Motivacion", variable=motivacion, onvalue=1, offvalue=0)
-check3.place(x=75, y=350)
 
 #Main Loop
 
 root.mainloop()
+
+
+# Coded with love for Emma
