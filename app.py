@@ -15,6 +15,7 @@ if platform == "win32":
 elif platform == "linux" or platform == "linux2":
     import notify2
 
+stop_threads = False
 
 
 # Carga la ventana de Tkinter
@@ -27,21 +28,45 @@ root.geometry("600x450")
 imagen = PhotoImage(file= "Assets/CTRL.png")
 Label(root, image= imagen).pack(pady=5)
 
-varTime = IntVar()
+
+varDatos = IntVar()
+varMotivacion = IntVar()
+
+
 
 # Define la listas donde se almacenaran los datos de la API
 listaTitulos = []
 listaMensajes = []
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-response = requests.get("https://jesusartz.net/api/datos", headers=headers)
-object = response.json()
-for i in object['postData']:
-    listaTitulos.append(i['titulo'])
-    listaMensajes.append(i['mensaje'])
+
+listaTD = []
+listaMD = []
+
+listaTM = []
+listaMM = []
+
+headers = headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+response = requests.get("http://jesusartz.net/datos/", headers=headers)
+
+json = response.json()
+
+
+for i in json['postData']:
+    listaTD.append(i['TituloD'])
+    listaMD.append(i['MensajeD'])
+
+for i in json['postData']:
+    listaTM.append(i['TituloS'])
+    listaMM.append(i['MensajeS'])
+
+listaTitulos.append(listaTD)
+listaTitulos.append(listaTM)
+
+listaMensajes.append(listaMD)
+listaMensajes.append(listaMM)
 
 
 # Detecta el tamaño de las listas
-longitud = len(listaMensajes)
+
 
 
 
@@ -64,55 +89,78 @@ def WindowsMessage(tittle, description):
 
 # Correr programa principal
 def mainProgram():
-    # Detecta la platarfoma en la que esta corriendo el programa
-    if platform == "linux" or platform == "linux2":
-        # Genera un numero aleartorio para enviar una notificacion al azar de la api 
-        randomNum = random.randint(5, longitud)
-        # Envia la notificacion de la Lista [RANDOM]
-        LinuxMessage(listaTitulos[randomNum], listaMensajes[randomNum])
-        # Tiempo de espera para la siguiente notificacion
-        time.sleep(15)
+    if (varDatos.get() == 1) & (varMotivacion.get() == 1):
+        if platform == "linux" or platform == "linux2":
+            randomNum = random.randint(0, 76)
+            choiseL = [0, 1]
+            choise = random.choice(choiseL)
 
-    elif platform == "win32":
-        # Genera un numero aleartorio para enviar una notificacion al azar de la api 
-        randomNum = random.randint(5, longitud)
-        # Envia la notificacion de la Lista [RANDOM]
-        WindowsMessage(listaTitulos[randomNum], listaMensajes[randomNum])
-        # Tiempo de espera para la siguiente notificacion
-        time.sleep(15)
+            LinuxMessage(listaTitulos[choise][randomNum], listaMensajes[choise][randomNum])
+            time.sleep(15)
+
+        elif platform == "win32":
+            randomNum = random.randint(0, 76)
+            choiseL = [0, 1]
+            choise = random.choice(choiseL)
+            WindowsMessage(listaTitulos[choise][randomNum], listaMensajes[choise][randomNum])
+            time.sleep(15)
     
-#def apiGet():
-#    while True:
-#        response = requests.get("http://localhost:3001/api/motivacion")
-#        object = response.json()
-#        for i in object:
-#            listaTitulos.append(i['titulo'])
-#            listaMensajes.append(i['mensaje'])
+        
 
+    elif (varDatos.get() == 0) & (varMotivacion.get() == 1):
+        if platform == "linux" or platform == "linux2":
+            randomNum = random.randint(0, 50)
+            
+            LinuxMessage(listaTitulos[0][randomNum], listaMensajes[0][randomNum])
+            time.sleep(15)
+
+        elif platform == "win32":
+            randomNum = random.randint(0, 50)
+            WindowsMessage(listaTitulos[0][randomNum], listaMensajes[0][randomNum])
+            time.sleep(15)
+        
+
+    elif (varDatos.get() == 1) & (varMotivacion.get() == 0):
+
+        if platform == "linux" or platform == "linux2":
+            randomNum = random.randint(51, 76)
+            LinuxMessage(listaTitulos[1][randomNum], listaMensajes[1][randomNum])
+            time.sleep(15)
+
+        elif platform == "win32":
+            randomNum = random.randint(51, 76)
+            WindowsMessage(listaTitulos[1][randomNum], listaMensajes[1][randomNum])
+            time.sleep(15)
+        
+    
+    
 
 # Esta funcion crea un hilo en el sistema para poder usar la interfaz a la vez que el bucle se ejecuta
 def bucle():
+    global stop_threads
     stop_threads = False
     while True:
+
         mainProgram()
-        stop_threads
-        if stop_threads:
+        
+        if stop_threads == True:
             break
-
-def StopThread():
+        # Vale verga la eficiencia
+    
+def Stop():
+    global stop_threads
     stop_threads = True
-
-
-
-
 
 #Botones y Checkbuttons
 
 botonInicio = Button(text="Start", command=lambda:threading.Thread(target=bucle).start())
-tiempoVar = Label(root, textvariable=varTime)
-tiempoVar.place(x=300, y=225)
-tiempoVar.pack()
-botonStop = Button(text="Stop", command=StopThread)
+
+c2 = Checkbutton(root, text="Motivacion", variable=varDatos, onvalue=1, offvalue=0)
+c3 = Checkbutton(root, text="Datos Curioso", variable=varMotivacion, onvalue=1, offvalue=0)
+
+c2.place(x= 100, y=300)
+c3.place(x= 100, y=275)
+botonStop = Button(text="Stop", command=Stop)
 botonCoffee = Button(text="Buy Me a Coffee", command=BuyMeaCoffee)
 botonCoffee.place(x= 450, y= 400)
 botonStop.place(x=300, y=400)
@@ -124,3 +172,4 @@ root.mainloop()
 
 
 # Coded with love for Emma
+
