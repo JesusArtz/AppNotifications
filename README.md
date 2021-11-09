@@ -10,7 +10,7 @@ If you are using Linux or Linux 2
 
 If you are using Windows 10 or 11
 
-`pip install win10toaster`
+`pip install win10toast`
 
 # Usage
 
