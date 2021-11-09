@@ -64,7 +64,10 @@ And click on Finish
 ### Credits
 
 Decky (Thank you for the art)
+
 zJairO (For the idea and motivation to follow the project)
+
+Arturo (Rainth) Thanks for you donation
 
 ### Buy Me a Coffee
 
