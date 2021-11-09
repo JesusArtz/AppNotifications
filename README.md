@@ -19,7 +19,7 @@ This is a beta, the operation is not correct, therefore it may fail
 ### Start the program
 
 To start the program you must run the Tkinter window with
-`python awita.py`
+`python app.py`
 
 Once the interface is started, click "Start"
 
