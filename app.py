@@ -79,7 +79,7 @@ def BuyMeaCoffee():
 def LinuxMessage(title, description):
     notify2.init('Test')
     notify = notify2.Notification(title, description)
-    notify
+    notify.send
     return
 
 # Define los parametros de notificacion para Windows
