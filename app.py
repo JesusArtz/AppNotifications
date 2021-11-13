@@ -21,7 +21,7 @@ stop_threads = False
 # Carga la ventana de Tkinter
 
 root = Tk()
-estilo = Style(theme='pers')
+estilo = Style(theme='alt')
 ventana = estilo.master
 root.title("App")
 root.geometry("600x450")
@@ -47,14 +47,14 @@ listaMM = []
 headers = headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 response = requests.get("http://jesusartz.net/datos/", headers=headers)
 
-json = response.json()
+api = response.json()
 
 
-for i in json['postData']:
+for i in api['postData']:
     listaTD.append(i['TituloD'])
     listaMD.append(i['MensajeD'])
 
-for i in json['postData']:
+for i in api['postData']:
     listaTM.append(i['TituloS'])
     listaMM.append(i['MensajeS'])
 
@@ -172,3 +172,4 @@ root.mainloop()
 
 
 # Coded with love for Emma
+
