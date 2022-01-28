@@ -45,7 +45,7 @@ listaTM = []
 listaMM = []
 
 headers = headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-response = requests.get("http://jesusartz.net/datos/", headers=headers)
+response = requests.get("http://137.184.124.114:8080/api/datos", headers=headers)
 
 api = response.json()
 
